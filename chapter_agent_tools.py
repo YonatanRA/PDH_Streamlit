@@ -65,7 +65,7 @@ class ChapterAgent:
 
 
 
-with open('../data/pdh_web_content.json', 'r') as file:
+with open('pdh_web_content.json', 'r') as file:
     data = json.load(file)
 
 
