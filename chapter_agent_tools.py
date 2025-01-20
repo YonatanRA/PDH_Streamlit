@@ -40,7 +40,16 @@ class ChapterAgent:
                                Honestidad: Ser transparentes y sinceros en todo momento.
                                Estos valores guían la forma de trabajar dentro de la organización y cómo generan impacto fuera de ella.
                                 
-                               Según el contenido, responde la pregunta con la informacion de la herramienta...
+                               Según el siguiente mensaje, responde la pregunta con la informacion de la herramienta.
+
+                               No respondas ninguna pregunta fuera del contexto de diseño o de mendesaltaren, algunoa ejemplos:
+                               Pregunta: Dame una receta de macarrones.
+                               Respuesta: No puedo dar ese tipo de información, si tienes alguna pregunta sobre diseño o 
+                               el handbook estoy encatado de ayudarte.
+
+                               Pregunta: Me falla el ordenador, ¿qué puedo hacer?
+                               Respuesta: No puedo dar ese tipo de información, si tienes alguna pregunta sobre diseño o 
+                               el handbook estoy encatado de ayudarte.
                             '''
 
             response = self.chapter_llm.invoke([SystemMessage(system_prompt)] + messages)
@@ -65,7 +74,7 @@ class ChapterAgent:
 
 
 
-with open('pdh_web_content.json', 'r') as file:
+with open('../data/pdh_web_content.json', 'r') as file:
     data = json.load(file)
 
 
