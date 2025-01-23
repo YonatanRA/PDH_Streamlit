@@ -46,10 +46,13 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     logger.info('AQUII 2')
 
     # load BM25
-    with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
-        bm25_retriever = pickle.load(bm25_file)
+    try:
+        with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
+            bm25_retriever = pickle.load(bm25_file)
+    except Exception as e:
+        logger.info(e)
     
-    logger.info('AQUII 2')
+    logger.info('AQUII 3')
     
 
     bm25_retriever.k = 10
