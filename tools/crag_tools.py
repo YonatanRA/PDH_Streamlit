@@ -38,18 +38,20 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
                              embedding_function=embeddings)
     
 
-    logger.info(retriver_chroma)
+    logger.info('AQUII 1')
 
     retriver_chroma = retriver_chroma.as_retriever(search_type='mmr', search_kwargs={'k':20, 
                                                                                      'lambda_mult': 0.5})
     
-    
+    logger.info('AQUII 2')
+
     # load BM25
     with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
         bm25_retriever = pickle.load(bm25_file)
-            
-    logger.info(bm25_retriever)
     
+    logger.info('AQUII 2')
+    
+
     bm25_retriever.k = 10
         
     ensemble_retriever = EnsembleRetriever(retrievers=[retriver_chroma, bm25_retriever],
@@ -63,6 +65,8 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
 
     compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
                                                           base_retriever=ensemble_retriever)
+    
+    logger.info('AQUII 4')
 
     return compression_pipeline
 
