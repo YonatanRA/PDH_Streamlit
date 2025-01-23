@@ -7,4 +7,4 @@ streamlit==1.40.1;
 langgraph==0.2.62;
 typing_extensions==4.12.2;
 pysqlite3-binary;
-sqlite3==3.35.0;
+sqlite;
