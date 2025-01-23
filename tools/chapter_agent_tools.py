@@ -7,8 +7,6 @@ from langgraph.prebuilt import ToolNode
 from langgraph.graph.message import MessagesState
 from langchain_core.messages import SystemMessage
 
-from tools.crag_tools import ensemble_retriever
-
 
 class ChapterAgent:
         
