@@ -39,18 +39,18 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
                              embedding_function=embeddings)
     
 
-    logger.info('AQUII 1')
+    logger.info('Chroma retriever init...')
 
     retriver_chroma = retriver_chroma.as_retriever(search_type='mmr', search_kwargs={'k':20, 
                                                                                      'lambda_mult': 0.5})
     
-    logger.info('AQUII 2')
+    logger.info('Chroma retriever defined.')
 
     # load BM25
     with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
         bm25_retriever = pickle.load(bm25_file)
     
-    logger.info('AQUII 3')
+    logger.info('BM25 retriever loaded.')
     
     try:
         bm25_retriever.k = 10
@@ -67,10 +67,12 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
         compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
                                                             base_retriever=ensemble_retriever)
         
-        logger.info('AQUII 4')
+        logger.info('Reranker loaded')
 
     except Exception as e:
         logger.info(e)
+
+    logger.info('EnsembleRetriever loaded')
 
     return compression_pipeline
 
