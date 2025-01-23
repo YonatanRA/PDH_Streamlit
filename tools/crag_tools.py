@@ -12,6 +12,8 @@ from langchain.retrievers.document_compressors import FlashrankRerank
 import pickle
 import os
 
+from tools.tools import logger
+
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -35,6 +37,9 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
                              collection_name=collection_name, 
                              embedding_function=embeddings)
     
+
+    logger.info(retriver_chroma)
+
     retriver_chroma = retriver_chroma.as_retriever(search_type='mmr', search_kwargs={'k':20, 
                                                                                      'lambda_mult': 0.5})
     
@@ -43,6 +48,7 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
         bm25_retriever = pickle.load(bm25_file)
             
+    logger.info(bm25_retriever)
     
     bm25_retriever.k = 10
         
