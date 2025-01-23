@@ -1,10 +1,12 @@
 # libraries
 import streamlit as st
-from chatbot import DesignHandbookBot
-from tools import logger
+from tools.chatbot import DesignHandbookBot
+from tools.tools import logger
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+st.set_page_config(page_title='PDH AI', page_icon='🤖', layout='wide')
 
 def pdh_chatbot():
 
@@ -48,8 +50,6 @@ def pdh_chatbot():
 
 # mendesaltaren image
 st.sidebar.markdown("[![PDH](https://cdn.prod.website-files.com/62f3882bdf914586601e212a/6399f2839e8ccf9859da1874_6202b1a3f47605af39b227cf_AxenykX.png)](https://www.designhandbook.com/es)")
-
-
 
 # user thread ids 
 THREAD_IDS = os.getenv('THREAD_IDS').split(',')
