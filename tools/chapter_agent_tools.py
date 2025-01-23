@@ -138,10 +138,8 @@ def get_chapter_4(message: str):
     text = data['chapter_4']['text']
 
     # chapter 4 extra content
-    retriever = ensemble_retriever('chapter_4_extra_content')
-    logger.info('AQUUUUI')
-    response = retriever.invoke(message)
-    logger.info(f'RRRRRRRRRR - {response}')
+    #retriever = ensemble_retriever('chapter_4_extra_content')
+    #response = retriever.invoke(message)
     #text += 'Contenido Extra: <documento>' + ' '.join([e.page_content for e in response]) + '<documento>'
 
     response =  [{'role': 'user'},{'type': 'text', 'text': text}]
