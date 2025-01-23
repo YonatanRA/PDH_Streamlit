@@ -30,6 +30,8 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     Return:
     EnsembleRetriever, ChromaDB+BM25+ReRanker retrieval
     """
+
+    logger.info('Retrieving extra content...')
     
     embeddings = OpenAIEmbeddings()
     
@@ -39,38 +41,31 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
                              embedding_function=embeddings)
     
 
-    logger.info('AQUII 1')
-
     retriver_chroma = retriver_chroma.as_retriever(search_type='mmr', search_kwargs={'k':20, 
                                                                                      'lambda_mult': 0.5})
     
-    logger.info('AQUII 2')
-
     # load BM25
     with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
         bm25_retriever = pickle.load(bm25_file)
     
-    logger.info('AQUII 3')
     
-    try:
-        bm25_retriever.k = 10
-            
-        ensemble_retriever = EnsembleRetriever(retrievers=[retriver_chroma, bm25_retriever],
-                                            weights=[0.5, 0.5])
 
-        redundant_filter = EmbeddingsRedundantFilter(embeddings=embeddings)
-
-        reranker = FlashrankRerank(model='ms-marco-TinyBERT-L-2-v2')
-
-        pipeline_compressor = DocumentCompressorPipeline(transformers=[redundant_filter, reranker])
-
-        compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
-                                                            base_retriever=ensemble_retriever)
+    bm25_retriever.k = 10
         
-        logger.info('AQUII 4')
+    ensemble_retriever = EnsembleRetriever(retrievers=[retriver_chroma, bm25_retriever],
+                                        weights=[0.5, 0.5])
 
-    except Exception as e:
-        logger.info(e)
+    redundant_filter = EmbeddingsRedundantFilter(embeddings=embeddings)
+
+    reranker = FlashrankRerank(model='ms-marco-TinyBERT-L-2-v2')
+
+    pipeline_compressor = DocumentCompressorPipeline(transformers=[redundant_filter, reranker])
+
+    compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
+                                                        base_retriever=ensemble_retriever)
+    
+    logger.info('Extra content retrieved.')
+
 
     return compression_pipeline
 
