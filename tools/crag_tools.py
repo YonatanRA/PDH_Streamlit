@@ -8,6 +8,7 @@ from langchain_chroma import Chroma
 from langchain.retrievers import ContextualCompressionRetriever, EnsembleRetriever
 from langchain.retrievers.document_compressors import DocumentCompressorPipeline
 from langchain_community.document_transformers.embeddings_redundant_filter import EmbeddingsRedundantFilter
+from flashrank import Ranker
 from langchain.retrievers.document_compressors import FlashrankRerank
 import pickle
 import os
