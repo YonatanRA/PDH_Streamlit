@@ -46,30 +46,30 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     logger.info('AQUII 2')
 
     # load BM25
-    try:
-        with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
-            bm25_retriever = pickle.load(bm25_file)
-    except Exception as e:
-        logger.info(e)
+    with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
+        bm25_retriever = pickle.load(bm25_file)
     
     logger.info('AQUII 3')
     
+    try:
+        bm25_retriever.k = 10
+            
+        ensemble_retriever = EnsembleRetriever(retrievers=[retriver_chroma, bm25_retriever],
+                                            weights=[0.5, 0.5])
 
-    bm25_retriever.k = 10
+        redundant_filter = EmbeddingsRedundantFilter(embeddings=embeddings)
+
+        reranker = FlashrankRerank(model='ms-marco-TinyBERT-L-2-v2')
+
+        pipeline_compressor = DocumentCompressorPipeline(transformers=[redundant_filter, reranker])
+
+        compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
+                                                            base_retriever=ensemble_retriever)
         
-    ensemble_retriever = EnsembleRetriever(retrievers=[retriver_chroma, bm25_retriever],
-                                           weights=[0.5, 0.5])
+        logger.info('AQUII 4')
 
-    redundant_filter = EmbeddingsRedundantFilter(embeddings=embeddings)
-
-    reranker = FlashrankRerank(model='ms-marco-TinyBERT-L-2-v2')
-
-    pipeline_compressor = DocumentCompressorPipeline(transformers=[redundant_filter, reranker])
-
-    compression_pipeline = ContextualCompressionRetriever(base_compressor=pipeline_compressor,
-                                                          base_retriever=ensemble_retriever)
-    
-    logger.info('AQUII 4')
+    except Exception as e:
+        logger.info(e)
 
     return compression_pipeline
 
