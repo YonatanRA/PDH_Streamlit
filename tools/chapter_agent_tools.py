@@ -1,6 +1,7 @@
 # libraries
 from tools.tools import logger
 import json
+import os
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import ToolNode
@@ -8,6 +9,8 @@ from langgraph.graph.message import MessagesState
 from langchain_core.messages import SystemMessage
 
 from tools.crag_tools import ensemble_retriever
+
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class ChapterAgent:
@@ -78,7 +81,7 @@ class ChapterAgent:
 
 
 
-with open('data/pdh_web_content.json', 'r') as file:
+with open(PATH + '/../data/pdh_web_content.json', 'r') as file:
     data = json.load(file)
 
 

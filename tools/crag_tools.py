@@ -10,6 +10,10 @@ from langchain.retrievers.document_compressors import DocumentCompressorPipeline
 from langchain_community.document_transformers.embeddings_redundant_filter import EmbeddingsRedundantFilter
 from langchain.retrievers.document_compressors import FlashrankRerank
 import pickle
+import os
+
+
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
@@ -27,7 +31,7 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     embeddings = OpenAIEmbeddings()
     
     # load chromaDB
-    retriver_chroma = Chroma(persist_directory='data/chroma_db',
+    retriver_chroma = Chroma(persist_directory=PATH + '/../data/chroma_db',
                              collection_name=collection_name, 
                              embedding_function=embeddings)
     
@@ -36,7 +40,7 @@ def ensemble_retriever(collection_name: str) -> EnsembleRetriever:
     
     
     # load BM25
-    with open(f'data/{collection_name}_bm25', 'rb') as bm25_file:
+    with open(PATH + f'/../data/{collection_name}_bm25', 'rb') as bm25_file:
         bm25_retriever = pickle.load(bm25_file)
             
     
