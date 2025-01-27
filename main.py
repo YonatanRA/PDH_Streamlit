@@ -53,7 +53,7 @@ def pdh_chatbot():
 
         st.session_state.messages.append({'role': 'assistant', 'content': full_response})
 
-        data = {'user': st.session_state.thread_id, 
+        data = {'user': st.session_state.thread_id[:-4], 
                 'question': prompt, 
                 'answer': full_response,
                 'datetime': strftime('%Y-%m-%d %H:%M:%S', gmtime())}
