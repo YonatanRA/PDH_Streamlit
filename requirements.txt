@@ -9,5 +9,6 @@ langchain-community==0.3.2;
 streamlit==1.40.1;
 langgraph==0.2.62;
 typing_extensions==4.12.2;
+supabase==2.11.0;
 pysqlite3-binary;
 

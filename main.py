@@ -1,12 +1,17 @@
 # libraries
 import streamlit as st
 from time import gmtime, strftime
-import json
+from supabase import create_client, Client
 from tools.chatbot import DesignHandbookBot
 from tools.tools import logger
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 st.set_page_config(page_title='PDH AI', page_icon='🤖', layout='wide')
 
@@ -48,16 +53,15 @@ def pdh_chatbot():
 
         st.session_state.messages.append({'role': 'assistant', 'content': full_response})
 
-        with open('data/conversation.json', 'r+') as file:
-            data = json.load(file)
-
-        data.append({'user': st.session_state.thread_id, 
-                     'question': prompt, 
-                     'answer': full_response,
-                     'datetime': strftime('%Y-%m-%d %H:%M:%S', gmtime())})
+        data = {'user': st.session_state.thread_id, 
+                'question': prompt, 
+                'answer': full_response,
+                'datetime': strftime('%Y-%m-%d %H:%M:%S', gmtime())}
         
-        with open('data/conversation.json', 'w+') as file:
-            json.dump(data, file)
+
+        supabase.table('conversation').insert(data).execute()
+        
+        logger.info('Data saved!')
 
         logger.info('End conversation.')
 
