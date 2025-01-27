@@ -1,5 +1,7 @@
 # libraries
 import streamlit as st
+from time import gmtime, strftime
+import json
 from tools.chatbot import DesignHandbookBot
 from tools.tools import logger
 import os
@@ -45,6 +47,18 @@ def pdh_chatbot():
                 message_placeholder.markdown(full_response)
 
         st.session_state.messages.append({'role': 'assistant', 'content': full_response})
+
+        with open('data/conversation.json', 'r+') as file:
+            data = json.load(file)
+
+        data.append({'user': st.session_state.thread_id, 
+                     'question': prompt, 
+                     'answer': full_response,
+                     'datetime': strftime('%Y-%m-%d %H:%M:%S', gmtime())})
+        
+        with open('data/conversation.json', 'w+') as file:
+            json.dump(data, file)
+
         logger.info('End conversation.')
 
 
