@@ -57,6 +57,12 @@ class ChapterAgent:
                                el handbook estoy encatado de ayudarte.
 
                                Antes de responder, llama a la herramienta que tienes.
+
+                               Debes citar siempre las FUENTES que estas utilizando para crear el contenido, ejemplos:
+                               Fuente: Design Handbook.
+                               Fuente: Thinking Systems From Donella Meadows.
+                               Además, debes diferenciar entre Design Handbook (version actual del contenido), 
+                               Product Design Handbook V1 y Product Design Handbook V2 (versiones viejas.)
                             '''
 
             response = self.chapter_llm.invoke([SystemMessage(system_prompt)] + messages)
